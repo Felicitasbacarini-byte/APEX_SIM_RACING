@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX Sim Racing Academy — Formación profesional en simuladores de competición</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0A0D;
+    --bg-panel: #14141A;
+    --bg-panel-raised: #1B1B22;
+    --border: #2A2A30;
+    --border-bright: #3D3D44;
+    --orange: #FF6A00;
+    --orange-dim: #B84E00;
+    --orange-glow: rgba(255, 106, 0, 0.18);
+    --white: #F5F5F7;
+    --grey: #8A8A93;
+    --grey-dim: #54545C;
+    --green: #3DDC84;
+    --font-display: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: var(--font-display);
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  a { color: inherit; text-decoration: none; }
+  ul { list-style: none; }
+
+  :focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--orange);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--orange);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--orange);
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10, 10, 13, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+  }
+
+  .logo .dot { color: var(--orange); }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--grey);
+  }
+
+  .nav-links a { transition: color 0.2s; position: relative; }
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    background: var(--orange);
+    color: #0A0A0D;
+    padding: 10px 20px;
+    border-radius: 4px;
+    letter-spacing: 0.02em;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { background: #FF7E1F; transform: translateY(-1px); }
+
+  .nav-toggle { display: none; }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 140px 0 80px;
+    position: relative;
+    background:
+      radial-gradient(ellipse 900px 500px at 85% 20%, var(--orange-glow), transparent 60%),
+      linear-gradient(180deg, #0A0A0D 0%, #0C0C10 100%);
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 64px 64px;
+    opacity: 0.25;
+    mask-image: linear-gradient(180deg, transparent, black 30%, black 70%, transparent);
+  }
+
+  .hero-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 56px;
+    align-items: center;
+    width: 100%;
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(40px, 5.2vw, 64px);
+    font-weight: 800;
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    margin: 18px 0 22px;
+  }
+
+  .hero-copy h1 .accent { color: var(--orange); }
+
+  .hero-copy p.lead {
+    font-size: 17px;
+    color: var(--grey);
+    max-width: 480px;
+    margin-bottom: 34px;
+  }
+
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 44px; }
+
+  .btn-primary {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 14px;
+    background: var(--orange);
+    color: #0A0A0D;
+    padding: 15px 28px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { background: #FF7E1F; transform: translateY(-1px); }
+
+  .btn-secondary {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 14px;
+    background: transparent;
+    color: var(--white);
+    padding: 15px 28px;
+    border-radius: 4px;
+    border: 1px solid var(--border-bright);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--orange); background: rgba(255,106,0,0.06); }
+
+  .hero-stats {
+    display: flex;
+    gap: 36px;
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+  }
+
+  .hero-stat .num {
+    font-family: var(--font-mono);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--white);
+  }
+  .hero-stat .num span { color: var(--orange); }
+  .hero-stat .label {
+    font-size: 12px;
+    color: var(--grey-dim);
+    margin-top: 2px;
+  }
+
+  /* HUD telemetry panel — signature element */
+  .hud {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 26px;
+    position: relative;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
+  }
+
+  .hud-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hud-top .session {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--grey-dim);
+    letter-spacing: 0.08em;
+  }
+
+  .hud-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--green);
+  }
+
+  .hud-status .led {
+    width: 7px; height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--green);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+
+  .hud-main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 20px;
+  }
+
+  .hud-cell {
+    background: var(--bg-panel-raised);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+  }
+
+  .hud-cell .k {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--grey-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .hud-cell .v {
+    font-family: var(--font-mono);
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  .hud-cell .v.delta-neg { color: var(--green); }
+  .hud-cell .v .unit { font-size: 13px; color: var(--grey); font-weight: 500; margin-left: 4px; }
+
+  .hud-cell.wide { grid-column: span 2; }
+
+  .gearbar { display: flex; gap: 4px; align-items: center; }
+  .gearbar .gear-num {
+    font-family: var(--font-mono);
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--orange);
+    width: 44px;
+  }
+  .rpm-track {
+    flex: 1;
+    height: 8px;
+    background: var(--bg);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .rpm-fill {
+    height: 100%;
+    width: 78%;
+    background: linear-gradient(90deg, var(--orange-dim), var(--orange));
+    border-radius: 4px;
+    animation: rpmshift 2.4s ease-in-out infinite;
+  }
+  @keyframes rpmshift {
+    0%, 100% { width: 62%; }
+    50% { width: 91%; }
+  }
+
+  .hud-sectors {
+    display: flex;
+    gap: 6px;
+  }
+  .sector {
+    flex: 1;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--green);
+  }
+  .sector.purple { background: #B14EFF; }
+
+  .hud-foot {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--grey-dim);
+  }
+
+  /* ===== SECTION SHARED ===== */
+  section { position: relative; padding: 110px 0; }
+  .section-head { max-width: 640px; margin-bottom: 56px; }
+  .section-head h2 {
+    font-size: clamp(30px, 3.6vw, 42px);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 16px 0 0;
+  }
+  .section-head p { color: var(--grey); font-size: 16px; margin-top: 16px; max-width: 560px; }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+
+  /* ===== ABOUT ===== */
+  .about { background: var(--bg); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+  .about-copy p { color: var(--grey); font-size: 16px; margin-bottom: 18px; max-width: 480px; }
+  .about-copy p:last-child { margin-bottom: 0; }
+
+  .about-specs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .spec-item {
+    background: var(--bg-panel);
+    padding: 24px;
+  }
+  .spec-item .v {
+    font-family: var(--font-mono);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--orange);
+  }
+  .spec-item .k {
+    font-size: 13px;
+    color: var(--grey);
+    margin-top: 6px;
+  }
+
+  /* ===== COURSES ===== */
+  .courses { background: var(--bg-panel); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+  .course-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .course-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.25s, transform 0.25s;
+    position: relative;
+  }
+  .course-card:hover { border-color: var(--border-bright); transform: translateY(-4px); }
+
+  .course-card.featured {
+    border-color: var(--orange);
+    background: linear-gradient(180deg, rgba(255,106,0,0.07), transparent 40%), var(--bg);
+  }
+
+  .course-tag {
+    position: absolute;
+    top: -1px;
+    right: 24px;
+    background: var(--orange);
+    color: #0A0A0D;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 5px 10px;
+    border-radius: 0 0 4px 4px;
+  }
+
+  .course-card .sector-marker {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--grey-dim);
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+  }
+
+  .course-card h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .course-card .level {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--orange);
+    margin-bottom: 18px;
+    letter-spacing: 0.04em;
+  }
+
+  .course-card .desc {
+    color: var(--grey);
+    font-size: 14.5px;
+    margin-bottom: 24px;
+    flex-grow: 1;
+  }
+
+  .course-card .features { margin-bottom: 28px; }
+  .course-card .features li {
+    font-size: 13.5px;
+    color: var(--white);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .course-card .features li::before {
+    content: '▸';
+    color: var(--orange);
+    font-size: 12px;
+  }
+
+  .course-card .price-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+    margin-bottom: 18px;
+  }
+  .course-card .price {
+    font-family: var(--font-mono);
+    font-size: 28px;
+    font-weight: 700;
+  }
+  .course-card .price .period { font-size: 12px; color: var(--grey-dim); font-weight: 500; }
+  .course-card .duration { font-size: 12px; color: var(--grey-dim); }
+
+  .course-card .btn-course {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 13px;
+    padding: 13px;
+    border-radius: 5px;
+    border: 1px solid var(--border-bright);
+    color: var(--white);
+    transition: all 0.2s;
+    cursor: pointer;
+    background: transparent;
+  }
+  .course-card.featured .btn-course {
+    background: var(--orange);
+    color: #0A0A0D;
+    border-color: var(--orange);
+  }
+  .course-card .btn-course:hover { border-color: var(--orange); color: var(--orange); }
+  .course-card.featured .btn-course:hover { background: #FF7E1F; color: #0A0A0D; }
+
+  /* ===== INSTRUCTORS / SIMULATORS ===== */
+  .rigs { background: var(--bg); }
+  .rigs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .rig-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--bg-panel);
+  }
+  .rig-visual {
+    height: 160px;
+    background: linear-gradient(135deg, #1B1B22, #0E0E12);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .rig-visual::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.4;
+  }
+  .rig-visual .rig-id {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--orange-dim);
+    letter-spacing: 0.1em;
+    position: relative;
+    z-index: 1;
+  }
+  .rig-body { padding: 22px; }
+  .rig-body h4 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .rig-body p { font-size: 13.5px; color: var(--grey); margin-bottom: 14px; }
+  .rig-specs {
+    display: flex;
+    gap: 14px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--grey-dim);
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+  }
+  .rig-specs span { color: var(--white); }
+
+  .coaches-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 24px;
+  }
+  .coach-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px;
+    background: var(--bg-panel);
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .coach-avatar {
+    width: 52px; height: 52px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--orange-dim), var(--orange));
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: 16px;
+    color: #0A0A0D;
+  }
+  .coach-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+  .coach-card .role { font-family: var(--font-mono); font-size: 11px; color: var(--orange); margin-bottom: 8px; }
+  .coach-card p { font-size: 13px; color: var(--grey); }
+
+  /* ===== TESTIMONIALS ===== */
+  .testimonials { background: var(--bg-panel); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .testi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .testi-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px;
+  }
+  .testi-laptime {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .testi-laptime .tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--grey-dim);
+    letter-spacing: 0.08em;
+  }
+  .testi-laptime .delta {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--green);
+  }
+  .testi-card blockquote {
+    font-size: 15px;
+    color: var(--white);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  .testi-author { display: flex; align-items: center; gap: 12px; }
+  .testi-author .ava {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--bg-panel-raised);
+    border: 1px solid var(--border-bright);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--orange);
+  }
+  .testi-author .name { font-size: 13.5px; font-weight: 600; }
+  .testi-author .detail { font-size: 12px; color: var(--grey-dim); }
+
+  /* ===== CONTACT ===== */
+  .contact { background: var(--bg); }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+  }
+  .contact-info p { color: var(--grey); font-size: 16px; margin-bottom: 32px; max-width: 420px; }
+  .contact-channels { display: flex; flex-direction: column; gap: 18px; }
+  .channel { display: flex; gap: 14px; align-items: baseline; }
+  .channel .k { font-family: var(--font-mono); font-size: 12px; color: var(--orange); width: 90px; flex-shrink: 0; }
+  .channel .v { font-size: 14.5px; color: var(--white); }
+
+  form { display: flex; flex-direction: column; gap: 16px; }
+  .field label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--grey-dim);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .field input, .field select, .field textarea {
+    width: 100%;
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 13px 14px;
+    color: var(--white);
+    font-family: var(--font-display);
+    font-size: 14.5px;
+    transition: border-color 0.2s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--orange);
+    outline: none;
+  }
+  .field textarea { resize: vertical; min-height: 90px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .form-submit {
+    margin-top: 6px;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 14px;
+    background: var(--orange);
+    color: #0A0A0D;
+    padding: 15px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .form-submit:hover { background: #FF7E1F; }
+
+  /* ===== FOOTER ===== */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 0;
+  }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer-inner .logo { font-size: 15px; }
+  .footer-meta { font-family: var(--font-mono); font-size: 12px; color: var(--grey-dim); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .hero-grid { grid-template-columns: 1fr; }
+    .hud { max-width: 460px; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    .course-cards, .rigs-grid, .coaches-row, .testi-grid { grid-template-columns: 1fr; }
+    .hero-stats { flex-wrap: wrap; gap: 24px; }
+  }
+
+  @media (max-width: 540px) {
+    .container { padding: 0 20px; }
+    .hero { padding: 120px 0 60px; }
+    .hud-main { grid-template-columns: 1fr 1fr; }
+    .field-row { grid-template-columns: 1fr; }
+    .about-specs { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">APEX<span class="dot">.</span></a>
+    <div class="nav-links">
+      <a href="#sobre">Academia</a>
+      <a href="#cursos">Cursos</a>
+      <a href="#simuladores">Simuladores</a>
+      <a href="#testimonios">Pilotos</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <a href="#cursos" class="nav-cta">Ver cursos</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow">Academia de sim racing competitivo</div>
+      <h1>Manejá como si el resultado<br>importara. <span class="accent">Porque importa.</span></h1>
+      <p class="lead">Formación profesional en simuladores de competición: técnica de pilotaje, ingeniería de setup y preparación mental para correr en serio, ya sea en ligas online o tu primer asiento real.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="document.getElementById('cursos').scrollIntoView()">Ver los 3 cursos</button>
+        <button class="btn-secondary" onclick="document.getElementById('sobre').scrollIntoView()">Cómo funciona</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="num"><span>+</span>340</div>
+          <div class="label">pilotos formados</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num">12</div>
+          <div class="label">rigs profesionales</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num">3</div>
+          <div class="label">programas activos</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hud" role="img" aria-label="Panel de telemetría con datos de vuelta en vivo">
+      <div class="hud-top">
+        <div class="session">SESIÓN · CLASIFICACIÓN · VUELTA 09/12</div>
+        <div class="hud-status"><span class="led"></span>EN PISTA</div>
+      </div>
+      <div class="hud-main">
+        <div class="hud-cell">
+          <div class="k">Delta</div>
+          <div class="v delta-neg">−0.184<span class="unit">s</span></div>
+        </div>
+        <div class="hud-cell">
+          <div class="k">Velocidad</div>
+          <div class="v">261<span class="unit">km/h</span></div>
+        </div>
+        <div class="hud-cell wide">
+          <div class="k">Marcha / RPM</div>
+          <div class="gearbar">
+            <div class="gear-num">5</div>
+            <div class="rpm-track"><div class="rpm-fill"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="hud-sectors" aria-hidden="true">
+        <div class="sector"></div>
+        <div class="sector purple"></div>
+        <div class="sector"></div>
+      </div>
+      <div class="hud-foot">
+        <span>SECTOR 2</span>
+        <span>MEJOR VUELTA: 1:42.318</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SOBRE LA ACADEMIA ===== -->
+<section class="about" id="sobre">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <div class="eyebrow">La academia</div>
+        <h2 style="margin-top:16px;">Entrenamos pilotos, no jugadores.</h2>
+      </div>
+      <div class="about-copy">
+        <p>APEX nació de una idea simple: el sim racing competitivo se entrena igual que cualquier disciplina de alto rendimiento. No alcanza con tener un volante caro; hace falta método, datos y alguien que te corrija la frenada.</p>
+        <p>Trabajamos con equipos de iRacing, ACC y rFactor 2 que necesitan subir de categoría, y con pilotos que arrancan de cero y quieren hacerlo bien desde la primera vuelta. Cada programa combina sesiones en rig con análisis de telemetría y revisión en video junto a un coach.</p>
+      </div>
+    </div>
+
+    <div class="about-specs" style="margin-top:56px;">
+      <div class="spec-item">
+        <div class="v">1:1</div>
+        <div class="k">Coaching personalizado por piloto</div>
+      </div>
+      <div class="spec-item">
+        <div class="v">DD</div>
+        <div class="k">Direct drive en todos los rigs</div>
+      </div>
+      <div class="spec-item">
+        <div class="v">100%</div>
+        <div class="k">Telemetría real exportable</div>
+      </div>
+      <div class="spec-item">
+        <div class="v">8</div>
+        <div class="k">Semanas promedio por programa</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container"><div class="divider"></div></div>
+
+<!-- ===== CURSOS ===== -->
+<section class="courses" id="cursos">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Programas 2026</div>
+      <h2>Tres caminos. Un solo objetivo: bajar el tiempo de vuelta.</h2>
+      <p>Elegí según de dónde salís: del cero absoluto, de la parrilla online, o de querer competir en serio con apoyo de equipo.</p>
+    </div>
+
+    <div class="course-cards">
+
+      <div class="course-card">
+        <div class="sector-marker">PROGRAMA 01 — FUNDAMENTOS</div>
+        <h3>Línea de Largada</h3>
+        <div class="level">NIVEL INICIACIÓN</div>
+        <p class="desc">Para quien recién arma su primer rig o viene de jugar casual y quiere entender por qué pierde tiempo en cada curva.</p>
+        <ul class="features">
+          <li>Postura, frenada y trail braking</li>
+          <li>Lectura básica de telemetría</li>
+          <li>Configuración de FFB y setup base</li>
+          <li>4 sesiones en vivo + grabaciones</li>
+        </ul>
+        <div class="price-row">
+          <div class="price">USD 120<span class="period">/ programa</span></div>
+          <div class="duration">4 semanas</div>
+        </div>
+        <button class="btn-course">Inscribirme</button>
+      </div>
+
+      <div class="course-card featured">
+        <div class="course-tag">MÁS ELEGIDO</div>
+        <div class="sector-marker">PROGRAMA 02 — RENDIMIENTO</div>
+        <h3>Ritmo de Clasificación</h3>
+        <div class="level">NIVEL INTERMEDIO COMPETITIVO</div>
+        <p class="desc">Para pilotos que ya corren ligas online y necesitan consistencia, setup propio y resultados que se sostengan 20 vueltas.</p>
+        <ul class="features">
+          <li>Análisis comparativo de telemetría</li>
+          <li>Ingeniería de setup por circuito</li>
+          <li>Estrategia de carrera y gestión de neumáticos</li>
+          <li>8 sesiones + revisión de incidentes en video</li>
+        </ul>
+        <div class="price-row">
+          <div class="price">USD 280<span class="period">/ programa</span></div>
+          <div class="duration">8 semanas</div>
+        </div>
+        <button class="btn-course">Inscribirme</button>
+      </div>
+
+      <div class="course-card">
+        <div class="sector-marker">PROGRAMA 03 — ALTO RENDIMIENTO</div>
+        <h3>Asiento de Equipo</h3>
+        <div class="level">NIVEL ÉLITE / TEAM</div>
+        <p class="desc">Preparación integral para pilotos que buscan asiento en un equipo de eSports o ya compiten en categorías oficiales.</p>
+        <ul class="features">
+          <li>Coaching 1:1 con piloto profesional</li>
+          <li>Preparación mental y rutina de pre-carrera</li>
+          <li>Simulación de clasificación bajo presión</li>
+          <li>Acceso a red de equipos asociados</li>
+        </ul>
+        <div class="price-row">
+          <div class="price">USD 540<span class="period">/ programa</span></div>
+          <div class="duration">12 semanas</div>
+        </div>
+        <button class="btn-course">Inscribirme</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== SIMULADORES / INSTRUCTORES ===== -->
+<section class="rigs" id="simuladores">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Equipamiento y coaches</div>
+      <h2>El mismo nivel de fierros que vas a encontrar en una categoría oficial.</h2>
+      <p>Doce puestos de simulación profesional y un cuerpo de coaches que compitió (y compite) en las ligas que vas a correr vos.</p>
+    </div>
+
+    <div class="rigs-grid">
+      <div class="rig-card">
+        <div class="rig-visual"><span class="rig-id">RIG · DD-01</span></div>
+        <div class="rig-body">
+          <h4>Estación Direct Drive Pro</h4>
+          <p>Volante de par directo, pedalera de carga con celda hidráulica y triple pantalla curva.</p>
+          <div class="rig-specs"><span class="v">20Nm</span> torque · <span class="v">3x32"</span> pantallas</div>
+        </div>
+      </div>
+      <div class="rig-card">
+        <div class="rig-visual"><span class="rig-id">RIG · MOV-02</span></div>
+        <div class="rig-body">
+          <h4>Estación con Motion 2DOF</h4>
+          <p>Plataforma de movimiento para sentir transferencia de peso real en frenada y curva.</p>
+          <div class="rig-specs"><span class="v">2DOF</span> motion · <span class="v">VR</span> compatible</div>
+        </div>
+      </div>
+      <div class="rig-card">
+        <div class="rig-visual"><span class="rig-id">RIG · VR-03</span></div>
+        <div class="rig-body">
+          <h4>Estación VR Inmersiva</h4>
+          <p>Pensada para entrenamiento de referencias visuales y trazada en circuitos nuevos.</p>
+          <div class="rig-specs"><span class="v">90Hz</span> visor · <span class="v">FOV</span> total</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="coaches-row">
+      <div class="coach-card">
+        <div class="coach-avatar">MR</div>
+        <div>
+          <h4>Mauro Reynal</h4>
+          <div class="role">HEAD COACH · ex-GT Sport Series</div>
+          <p>A cargo de Ritmo de Clasificación y Asiento de Equipo.</p>
+        </div>
+      </div>
+      <div class="coach-card">
+        <div class="coach-avatar">CL</div>
+        <div>
+          <h4>Camila Liendro</h4>
+          <div class="role">COACH DE TELEMETRÍA · ingeniera de datos</div>
+          <p>Lidera los módulos de análisis y setup en los tres programas.</p>
+        </div>
+      </div>
+      <div class="coach-card">
+        <div class="coach-avatar">FT</div>
+        <div>
+          <h4>Facundo Torres</h4>
+          <div class="role">COACH DE FUNDAMENTOS · instructor full-time</div>
+          <p>A cargo de Línea de Largada, formación desde cero.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIOS ===== -->
+<section class="testimonials" id="testimonios">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Resultados de pilotos</div>
+      <h2>Lo que dicen los que ya bajaron su tiempo de vuelta.</h2>
+    </div>
+
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-laptime">
+          <span class="tag">ANTES → DESPUÉS</span>
+          <span class="delta">−1.92s</span>
+        </div>
+        <blockquote>"Hice Línea de Largada sin haber tocado un sim en mi vida. En cuatro semanas entendí más de frenada que en un año mirando videos."</blockquote>
+        <div class="testi-author">
+          <div class="ava">JP</div>
+          <div>
+            <div class="name">Juan Pereyra</div>
+            <div class="detail">Programa: Línea de Largada</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-laptime">
+          <span class="tag">ANTES → DESPUÉS</span>
+          <span class="delta">−0.87s</span>
+        </div>
+        <blockquote>"El módulo de setup me cambió la carrera. Pasé de copiar setups de internet a entender por qué mi auto subviraba en curvas lentas."</blockquote>
+        <div class="testi-author">
+          <div class="ava">LS</div>
+          <div>
+            <div class="name">Lucía Sosa</div>
+            <div class="detail">Programa: Ritmo de Clasificación</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-laptime">
+          <span class="tag">RESULTADO</span>
+          <span class="delta">ASIENTO CONFIRMADO</span>
+        </div>
+        <blockquote>"Llegué buscando consistencia y salí con un asiento en un equipo de la liga. El coaching de presión en clasificación fue determinante."</blockquote>
+        <div class="testi-author">
+          <div class="ava">DR</div>
+          <div>
+            <div class="name">Diego Ramos</div>
+            <div class="detail">Programa: Asiento de Equipo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACTO ===== -->
+<section class="contact" id="contacto">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Hablemos</div>
+      <h2>Decinos en qué punto de la curva estás.</h2>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-info">
+        <p>Contanos tu nivel y qué simulador usás, y te recomendamos qué programa te conviene arrancar. Respondemos en menos de 24 horas.</p>
+        <div class="contact-channels">
+          <div class="channel"><span class="k">EMAIL</span><span class="v">academia@apexsimracing.com</span></div>
+          <div class="channel"><span class="k">DISCORD</span><span class="v">discord.gg/apexsimracing</span></div>
+          <div class="channel"><span class="k">SEDE</span><span class="v">Buenos Aires, Argentina</span></div>
+          <div class="channel"><span class="k">HORARIO</span><span class="v">Lun a sáb, 10 a 22 h</span></div>
+        </div>
+      </div>
+
+      <form onsubmit="event.preventDefault(); this.querySelector('.form-submit').textContent='Enviado ✓';">
+        <div class="field-row">
+          <div class="field">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" type="text" placeholder="Tu nombre" required>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="tu@email.com" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="programa">Programa de interés</label>
+          <select id="programa">
+            <option>Línea de Largada — Iniciación</option>
+            <option>Ritmo de Clasificación — Intermedio</option>
+            <option>Asiento de Equipo — Élite</option>
+            <option>No estoy seguro todavía</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="msg">Contanos tu nivel</label>
+          <textarea id="msg" placeholder="¿Qué simulador usás? ¿Hace cuánto corrés?"></textarea>
+        </div>
+        <button type="submit" class="form-submit">Enviar consulta</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <a href="#" class="logo">APEX<span class="dot">.</span></a>
+    <div class="footer-meta">© 2026 APEX SIM RACING ACADEMY — TODOS LOS DERECHOS RESERVADOS</div>
+  </div>
+</footer>
+
+</body>
+</html>
